@@ -1,4 +1,4 @@
-.cssload-dots {
+.cssload-dots-absolute {
 	width: 0;
 	height: 0;
 	position: absolute;
@@ -13,6 +13,24 @@
 	-ms-filter: url(#goo);
 	-webkit-filter: url(#goo);
 	-moz-filter: url(#goo);
+}
+
+.cssload-dots-normal {
+	width: 0;
+	height: 0;
+	position: unset;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	margin: auto;
+	outline: 1px solid red;
+	filter: url(#goo);
+	-o-filter: url(#goo);
+	-ms-filter: url(#goo);
+	-webkit-filter: url(#goo);
+	-moz-filter: url(#goo);
+	transform: scale(0.4);
 }
 
 .cssload-dot {

@@ -1,10 +1,19 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
+// Styles
 import './Loader.styles.scss';
 
-const Loader = () => {
+const Loader = props => {
 	return (
 		<React.Fragment>
-			<div className='cssload-dots'>
+			<div
+				className={
+					props.normal
+						? 'cssload-dots-normal'
+						: 'cssload-dots-absolute'
+				}
+			>
 				<div className='cssload-dot'></div>
 				<div className='cssload-dot'></div>
 				<div className='cssload-dot'></div>
@@ -30,6 +39,10 @@ const Loader = () => {
 			</svg>
 		</React.Fragment>
 	);
+};
+
+Loader.propTypes = {
+	normal: PropTypes.bool
 };
 
 export default Loader;

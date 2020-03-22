@@ -26,7 +26,6 @@ function Scream(scream) {
 		likeCount,
 		commentCount
 	} = scream.scream;
-	console.log(scream);
 	return (
 		<Grid container alignItems='stretch' item sm={4}>
 			<Card className={classes.card}>
