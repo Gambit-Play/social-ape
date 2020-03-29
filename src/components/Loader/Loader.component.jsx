@@ -10,7 +10,7 @@ const Loader = props => {
 			<div
 				className={
 					props.normal
-						? 'cssload-dots-normal'
+						? 'cssload-dots-small'
 						: 'cssload-dots-absolute'
 				}
 			>

@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 
 // Components
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
-import Loader from '../../components/Loader/Loader.component';
+import LoginSingup from '../../components/LoginSingup/LoginSingup.component';
 
 // Assets
 import AppIcon from '../../images/icon.png';
@@ -39,6 +36,7 @@ const Login = props => {
 			.post('/login', userData)
 			.then(res => {
 				console.log(res.data);
+				localStorage.setItem('FBIdToken', `Bearer ${res.data.token}`);
 				setLoading(false);
 				props.history.push('/');
 			})
@@ -78,58 +76,15 @@ const Login = props => {
 				<Typography variant='h3' className={classes.pageTitle}>
 					Login
 				</Typography>
-				<form
-					noValidate
-					onSubmit={handleSubmit}
-					className={classes.formContainer}
-				>
-					<TextField
-						id='email'
-						name='email'
-						type='email'
-						label='Email'
-						variant='outlined'
-						color='secondary'
-						helperText={errors.email}
-						error={errors.email ? true : false}
-						fullWidth
-						className={classes.textField}
-						value={email}
-						onChange={handleChange}
-					/>
-					<TextField
-						id='password'
-						name='password'
-						type='password'
-						label='Password'
-						variant='outlined'
-						color='secondary'
-						helperText={errors.password || errors.general}
-						error={errors.password || errors.general ? true : false}
-						fullWidth
-						className={classes.textField}
-						value={password}
-						onChange={handleChange}
-					/>
-					{loading ? (
-						<div className={classes.loader}>
-							<Loader normal />
-						</div>
-					) : (
-						<Button
-							type='submit'
-							variant='contained'
-							color='secondary'
-							className={classes.button}
-						>
-							Login
-						</Button>
-					)}
-					<div className={classes.signupLink}>
-						You don't have an account? Sign up{' '}
-						<Link to='/signup'>here</Link>
-					</div>
-				</form>
+				<LoginSingup
+					handleSubmit={handleSubmit}
+					handleChange={handleChange}
+					email={email}
+					password={password}
+					loading={loading}
+					isLogin
+					errors={errors}
+				/>
 			</Grid>
 			<Grid item sm></Grid>
 			<Snackbar

@@ -5,6 +5,11 @@
 // 		'Helvetica Neue', sans-serif;
 // }
 
+a {
+	text-decoration: none;
+	color: #006064;
+}
+
 .main-content {
 	min-height: 100vh;
 	max-width: 80vw;
@@ -15,11 +20,6 @@
 
 .nav-container {
 	justify-content: center;
-}
-
-a {
-	text-decoration: none;
-	color: #006064;
 }
 
 .MuiAlert-message {
