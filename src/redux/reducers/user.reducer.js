@@ -23,7 +23,7 @@ const UserReducer = (state = initialState, action) => {
 				...action.payload
 			};
 		case SET_UNAUTHENTICATED:
-			return state;
+			return initialState;
 		default:
 			return state;
 	}

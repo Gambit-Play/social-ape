@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
+
+// Redux
+import { connect } from 'react-redux';
+import {
+	signupUser,
+	closeModule,
+	logoutUser
+} from '../../redux/actions/user.actions';
 
 // Components
 import Grid from '@material-ui/core/Grid';
@@ -21,9 +28,6 @@ const Signup = props => {
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [handle, setHandle] = useState('');
-	const [loading, setLoading] = useState(false);
-	const [errors, setErrors] = useState({});
-	const [open, setOpen] = useState(false);
 
 	const handleSubmit = event => {
 		event.preventDefault();
@@ -34,37 +38,14 @@ const Signup = props => {
 			handle
 		};
 
-		setLoading(true);
-		console.log(newUser);
-		axios
-			.post('/signup', newUser)
-			.then(res => {
-				console.log(res.data);
-				localStorage.setItem('FBIdToken', `Bearer ${res.data.token}`);
-				setLoading(false);
-				props.history.push('/');
-			})
-			.catch(err => {
-				const errorMessage = err.response.data;
-				console.log(errorMessage);
-				setErrors(err.response.data);
-				setLoading(false);
-				if (
-					!errorMessage.hasOwnProperty('email') &&
-					!errorMessage.hasOwnProperty('password') &&
-					!errorMessage.hasOwnProperty('general') &&
-					!errorMessage.hasOwnProperty('handle') &&
-					!errorMessage.hasOwnProperty('confirmPassword')
-				) {
-					setOpen(true);
-				}
-			});
+		props.signupUser(newUser, props.history);
 	};
 
 	const handleChange = event => {
 		event.target.name === 'email' && setEmail(event.target.value);
 		event.target.name === 'password' && setPassword(event.target.value);
-		event.target.name === 'confirmPassword' && setConfirmPassword(event.target.value);
+		event.target.name === 'confirmPassword' &&
+			setConfirmPassword(event.target.value);
 		event.target.name === 'handle' && setHandle(event.target.value);
 	};
 
@@ -73,7 +54,7 @@ const Signup = props => {
 			return;
 		}
 
-		setOpen(false);
+		props.closeModule();
 	};
 
 	return (
@@ -91,20 +72,23 @@ const Signup = props => {
 					password={password}
 					confirmPassword={confirmPassword}
 					handle={handle}
-					loading={loading}
 					isSignup
-					errors={errors}
 				/>
 			</Grid>
 			<Grid item sm></Grid>
 			<Snackbar
 				anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-				open={open}
+				open={props.UI.open}
 				autoHideDuration={6000}
 				onClose={handleClose}
 				className={classes.snackbar}
 			>
-				<Alert elevation={6} variant='filled' onClose={handleClose} severity='error'>
+				<Alert
+					elevation={6}
+					variant='filled'
+					onClose={handleClose}
+					severity='error'
+				>
 					Wrong credential. This user does not exist
 				</Alert>
 			</Snackbar>
@@ -113,7 +97,22 @@ const Signup = props => {
 };
 
 Signup.propTypes = {
-	history: PropTypes.object
+	history: PropTypes.object.isRequired,
+	user: PropTypes.object.isRequired,
+	UI: PropTypes.object.isRequired,
+	logoutUser: PropTypes.func.isRequired,
+	closeModule: PropTypes.func.isRequired
 };
 
-export default Signup;
+const mapStateToProps = state => ({
+	user: state.user,
+	UI: state.UI
+});
+
+const mapActionsToProps = {
+	signupUser,
+	logoutUser,
+	closeModule
+};
+
+export default connect(mapStateToProps, mapActionsToProps)(Signup);

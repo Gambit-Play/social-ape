@@ -1,6 +1,13 @@
 import { UITypes } from '../types';
 
-const { LOADING_START, LOADING_FINISH, SET_OPEN, SET_ERRORS, CLEAR_ERRORS, SET_CLOSE } = UITypes;
+const {
+	LOADING_START,
+	LOADING_FINISH,
+	SET_OPEN,
+	SET_ERRORS,
+	CLEAR_ERRORS,
+	SET_CLOSE
+} = UITypes;
 const initialState = {
 	loading: false,
 	errors: '',

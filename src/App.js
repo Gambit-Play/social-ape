@@ -5,6 +5,8 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 // Redux
 import { Provider } from 'react-redux';
 import store from './redux/store';
+import { UserTypes } from './redux/types';
+import { logoutUser, getUserData } from './redux/actions/user.actions';
 
 // Pages
 import Home from './pages/Home/Home.page';
@@ -20,18 +22,21 @@ import AuthRoute from './utils/AuthRoute';
 import { StylesProvider, ThemeProvider } from '@material-ui/core/styles';
 import theme from './GlobalMui.theme';
 import './App.styles.scss';
+import axios from 'axios';
 
+const { SET_AUTHENTICATED } = UserTypes;
 const token = localStorage.FBIdToken;
-let authenticated;
 
 if (token) {
 	const decodedToken = jwtDecode(token);
 	console.log(decodedToken);
 	if (decodedToken.exp * 1001 < Date.now()) {
+		store.dispatch(logoutUser());
 		window.location.href = '/login';
-		authenticated = false;
 	} else {
-		authenticated = true;
+		store.dispatch({ type: SET_AUTHENTICATED });
+		axios.defaults.headers.common['Authorization'] = token;
+		store.dispatch(getUserData());
 	}
 }
 
@@ -46,18 +51,8 @@ const App = () => {
 						<div className='main-content'>
 							<Switch>
 								<Route exact path='/' component={Home} />
-								<AuthRoute
-									exact
-									path='/login'
-									component={Login}
-									authenticated={authenticated}
-								/>
-								<AuthRoute
-									exact
-									path='/signup'
-									component={Signup}
-									authenticated={authenticated}
-								/>
+								<AuthRoute exact path='/login' component={Login} />
+								<AuthRoute exact path='/signup' component={Signup} />
 							</Switch>
 						</div>
 					</Router>
