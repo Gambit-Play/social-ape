@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
+
+// Redux
+import { connect } from 'react-redux';
+import { loginUser, closeModule } from '../../redux/actions/user.actions';
 
 // Components
 import Grid from '@material-ui/core/Grid';
@@ -19,9 +22,8 @@ const Login = props => {
 	const classes = useStyles();
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
-	const [loading, setLoading] = useState(false);
-	const [errors, setErrors] = useState({});
-	const [open, setOpen] = useState(false);
+
+	console.log(props);
 
 	const handleSubmit = event => {
 		event.preventDefault();
@@ -30,29 +32,7 @@ const Login = props => {
 			password
 		};
 
-		setLoading(true);
-
-		axios
-			.post('/login', userData)
-			.then(res => {
-				console.log(res.data);
-				localStorage.setItem('FBIdToken', `Bearer ${res.data.token}`);
-				setLoading(false);
-				props.history.push('/');
-			})
-			.catch(err => {
-				const resError = err.response.data;
-				console.log(resError);
-				setErrors(err.response.data);
-				setLoading(false);
-				if (
-					!resError.hasOwnProperty('email') &&
-					!resError.hasOwnProperty('password') &&
-					!resError.hasOwnProperty('general')
-				) {
-					setOpen(true);
-				}
-			});
+		props.loginUser(userData, props.history);
 	};
 
 	const handleChange = event => {
@@ -65,7 +45,7 @@ const Login = props => {
 			return;
 		}
 
-		setOpen(false);
+		props.closeModule();
 	};
 
 	return (
@@ -81,25 +61,18 @@ const Login = props => {
 					handleChange={handleChange}
 					email={email}
 					password={password}
-					loading={loading}
 					isLogin
-					errors={errors}
 				/>
 			</Grid>
 			<Grid item sm></Grid>
 			<Snackbar
 				anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-				open={open}
+				open={props.UI.open}
 				autoHideDuration={6000}
 				onClose={handleClose}
 				className={classes.snackbar}
 			>
-				<Alert
-					elevation={6}
-					variant='filled'
-					onClose={handleClose}
-					severity='error'
-				>
+				<Alert elevation={6} variant='filled' onClose={handleClose} severity='error'>
 					Wrong credential. This user does not exist
 				</Alert>
 			</Snackbar>
@@ -108,7 +81,21 @@ const Login = props => {
 };
 
 Login.propTypes = {
-	history: PropTypes.object
+	history: PropTypes.object.isRequired,
+	loginUser: PropTypes.func.isRequired,
+	closeModule: PropTypes.func.isRequired,
+	user: PropTypes.object.isRequired,
+	UI: PropTypes.object.isRequired
 };
 
-export default Login;
+const mapActionsToProps = {
+	loginUser,
+	closeModule
+};
+
+const mapStateToProps = state => ({
+	user: state.user,
+	UI: state.UI
+});
+
+export default connect(mapStateToProps, mapActionsToProps)(Login);

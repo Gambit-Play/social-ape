@@ -1,5 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
+// Redux
+import { connect } from 'react-redux';
 
 // Components
 import TextField from '@material-ui/core/TextField';
@@ -11,33 +15,14 @@ import useStyles from './LoginSignup.styles';
 
 const LoginSingup = props => {
 	const classes = useStyles();
-	const {
-		handleSubmit,
-		handleChange,
-		email,
-		password,
-		confirmPassword,
-		handle,
-		loading,
-		isLogin,
-		isSignup,
-		errors
-	} = props;
+	const { handleSubmit, handleChange, email, password, confirmPassword, handle, isLogin, isSignup, UI } = props;
 
 	if (isLogin && isSignup) {
-		return (
-			<h3
-				className={classes.warningText}
-			>{`You can´t have both "isLogin" and "isSignup" enabled`}</h3>
-		);
+		return <h3 className={classes.warningText}>{`You can´t have both "isLogin" and "isSignup" enabled`}</h3>;
 	}
 
 	return (
-		<form
-			noValidate
-			onSubmit={handleSubmit}
-			className={classes.formContainer}
-		>
+		<form noValidate onSubmit={handleSubmit} className={classes.formContainer}>
 			<TextField
 				id='email'
 				name='email'
@@ -45,8 +30,8 @@ const LoginSingup = props => {
 				label='Email'
 				variant='outlined'
 				color='secondary'
-				helperText={errors.email}
-				error={errors.email ? true : false}
+				helperText={UI.errors.email}
+				error={UI.errors.email ? true : false}
 				fullWidth
 				className={classes.textField}
 				value={email}
@@ -59,8 +44,8 @@ const LoginSingup = props => {
 				label='Password'
 				variant='outlined'
 				color='secondary'
-				helperText={errors.password || errors.general}
-				error={errors.password || errors.general ? true : false}
+				helperText={UI.errors.password || UI.errors.general}
+				error={UI.errors.password || UI.errors.general ? true : false}
 				fullWidth
 				className={classes.textField}
 				value={password}
@@ -75,10 +60,8 @@ const LoginSingup = props => {
 					label='Confirm Passowrd'
 					variant='outlined'
 					color='secondary'
-					helperText={errors.confirmPassword || errors.general}
-					error={
-						errors.confirmPassword || errors.general ? true : false
-					}
+					helperText={UI.errors.confirmPassword || UI.errors.general}
+					error={UI.errors.confirmPassword || UI.errors.general ? true : false}
 					fullWidth
 					className={classes.textField}
 					value={confirmPassword}
@@ -94,8 +77,8 @@ const LoginSingup = props => {
 					label='Handle'
 					variant='outlined'
 					color='secondary'
-					helperText={errors.handle || errors.general}
-					error={errors.handle || errors.general ? true : false}
+					helperText={UI.errors.handle || UI.errors.general}
+					error={UI.errors.handle || UI.errors.general ? true : false}
 					fullWidth
 					className={classes.textField}
 					value={handle}
@@ -103,17 +86,12 @@ const LoginSingup = props => {
 				/>
 			)}
 
-			{loading ? (
+			{UI.loading ? (
 				<div className={classes.loader}>
 					<Loader normal />
 				</div>
 			) : (
-				<Button
-					type='submit'
-					variant='contained'
-					color='secondary'
-					className={classes.button}
-				>
+				<Button type='submit' variant='contained' color='secondary' className={classes.button}>
 					{isSignup && 'Sign up'}
 					{isLogin && 'Login'}
 				</Button>
@@ -136,4 +114,20 @@ const LoginSingup = props => {
 	);
 };
 
-export default LoginSingup;
+LoginSingup.propTypes = {
+	handleSubmit: PropTypes.func.isRequired,
+	handleChange: PropTypes.func.isRequired,
+	email: PropTypes.string.isRequired,
+	password: PropTypes.string.isRequired,
+	confirmPassword: PropTypes.string,
+	handle: PropTypes.string,
+	isLogin: PropTypes.bool,
+	isSignup: PropTypes.bool,
+	UI: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+	UI: state.UI
+});
+
+export default connect(mapStateToProps)(LoginSingup);

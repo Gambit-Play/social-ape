@@ -2,6 +2,10 @@ import React from 'react';
 import jwtDecode from 'jwt-decode';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
+// Redux
+import { Provider } from 'react-redux';
+import store from './redux/store';
+
 // Pages
 import Home from './pages/Home/Home.page';
 import Login from './pages/Login/Login.page';
@@ -33,35 +37,33 @@ if (token) {
 
 const App = () => {
 	return (
-		<React.Fragment>
+		<Provider store={store}>
 			<StylesProvider injectFirst>
 				<CssBaseline />
 				<ThemeProvider theme={theme}>
-					<div className='App'>
-						<Router>
-							<Navbar />
-							<div className='main-content'>
-								<Switch>
-									<Route exact path='/' component={Home} />
-									<AuthRoute
-										exact
-										path='/login'
-										component={Login}
-										authenticated={authenticated}
-									/>
-									<AuthRoute
-										exact
-										path='/signup'
-										component={Signup}
-										authenticated={authenticated}
-									/>
-								</Switch>
-							</div>
-						</Router>
-					</div>
+					<Router>
+						<Navbar />
+						<div className='main-content'>
+							<Switch>
+								<Route exact path='/' component={Home} />
+								<AuthRoute
+									exact
+									path='/login'
+									component={Login}
+									authenticated={authenticated}
+								/>
+								<AuthRoute
+									exact
+									path='/signup'
+									component={Signup}
+									authenticated={authenticated}
+								/>
+							</Switch>
+						</div>
+					</Router>
 				</ThemeProvider>
 			</StylesProvider>
-		</React.Fragment>
+		</Provider>
 	);
 };
 
