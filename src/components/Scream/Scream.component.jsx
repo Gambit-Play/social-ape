@@ -27,7 +27,7 @@ function Scream(scream) {
 		commentCount
 	} = scream.scream;
 	return (
-		<Grid container alignItems='stretch' item sm={4}>
+		<Grid container alignItems='stretch' item>
 			<Card className={classes.card}>
 				<Avatar src={userImage} className={classes.avatar} />
 				<CardContent>
@@ -35,10 +35,9 @@ function Scream(scream) {
 						variant='h5'
 						color='secondary'
 						component={Link}
-						to={`/users/${userHandle}`}
+						to={`/user/${userHandle}`}
 					>
-						{' '}
-						{userHandle}{' '}
+						{userHandle}
 					</Typography>
 					<Typography variant='body2' color='textSecondary'>
 						{dayjs(createdAt).fromNow()}

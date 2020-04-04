@@ -24,10 +24,13 @@ import useStyles from './Signup.style';
 
 const Signup = props => {
 	const classes = useStyles();
-	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
-	const [confirmPassword, setConfirmPassword] = useState('');
-	const [handle, setHandle] = useState('');
+	const [userCredentials, setUserCredentials] = useState({
+		email: '',
+		password: '',
+		confirmPassword: '',
+		handle: ''
+	});
+	const { email, password, confirmPassword, handle } = userCredentials;
 
 	const handleSubmit = event => {
 		event.preventDefault();
@@ -42,11 +45,13 @@ const Signup = props => {
 	};
 
 	const handleChange = event => {
-		event.target.name === 'email' && setEmail(event.target.value);
-		event.target.name === 'password' && setPassword(event.target.value);
-		event.target.name === 'confirmPassword' &&
-			setConfirmPassword(event.target.value);
-		event.target.name === 'handle' && setHandle(event.target.value);
+		const { name, value } = event.target;
+
+		setUserCredentials({ ...userCredentials, [name]: value }); // It´s the same as the code below but cleaner
+		// event.target.name === 'email' && setEmail(event.target.value);
+		// event.target.name === 'password' && setPassword(event.target.value);
+		// event.target.name === 'confirmPassword' && setConfirmPassword(event.target.value);
+		// event.target.name === 'handle' && setHandle(event.target.value);
 	};
 
 	const handleClose = (event, reason) => {

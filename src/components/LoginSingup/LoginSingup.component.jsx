@@ -15,14 +15,32 @@ import useStyles from './LoginSignup.styles';
 
 const LoginSingup = props => {
 	const classes = useStyles();
-	const { handleSubmit, handleChange, email, password, confirmPassword, handle, isLogin, isSignup, UI } = props;
+	const {
+		handleSubmit,
+		handleChange,
+		email,
+		password,
+		confirmPassword,
+		handle,
+		isLogin,
+		isSignup,
+		UI
+	} = props;
 
 	if (isLogin && isSignup) {
-		return <h3 className={classes.warningText}>{`You can´t have both "isLogin" and "isSignup" enabled`}</h3>;
+		return (
+			<h3 className={classes.warningText}>
+				{`You can´t have both "isLogin" and "isSignup" enabled`}
+			</h3>
+		);
 	}
 
 	return (
-		<form noValidate onSubmit={handleSubmit} className={classes.formContainer}>
+		<form
+			noValidate
+			onSubmit={handleSubmit}
+			className={classes.formContainer}
+		>
 			<TextField
 				id='email'
 				name='email'
@@ -61,7 +79,11 @@ const LoginSingup = props => {
 					variant='outlined'
 					color='secondary'
 					helperText={UI.errors.confirmPassword || UI.errors.general}
-					error={UI.errors.confirmPassword || UI.errors.general ? true : false}
+					error={
+						UI.errors.confirmPassword || UI.errors.general
+							? true
+							: false
+					}
 					fullWidth
 					className={classes.textField}
 					value={confirmPassword}
@@ -91,7 +113,12 @@ const LoginSingup = props => {
 					<Loader normal />
 				</div>
 			) : (
-				<Button type='submit' variant='contained' color='secondary' className={classes.button}>
+				<Button
+					type='submit'
+					variant='contained'
+					color='secondary'
+					className={classes.button}
+				>
 					{isSignup && 'Sign up'}
 					{isLogin && 'Login'}
 				</Button>

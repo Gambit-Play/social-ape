@@ -1,13 +1,19 @@
 // Redux Types
 import { UserTypes } from '../types';
 
-const { SET_USER, SET_AUTHENTICATED, SET_UNAUTHENTICATED } = UserTypes;
+const {
+	SET_USER,
+	SET_AUTHENTICATED,
+	SET_UNAUTHENTICATED,
+	LOADING_USER
+} = UserTypes;
 
 const initialState = {
 	authenticated: false,
 	credentials: {},
 	likes: [],
-	notifications: []
+	notifications: [],
+	loading: false
 };
 
 const UserReducer = (state = initialState, action) => {
@@ -20,7 +26,13 @@ const UserReducer = (state = initialState, action) => {
 		case SET_USER:
 			return {
 				authenticated: true,
+				loading: false,
 				...action.payload
+			};
+		case LOADING_USER:
+			return {
+				...state,
+				loading: true
 			};
 		case SET_UNAUTHENTICATED:
 			return initialState;

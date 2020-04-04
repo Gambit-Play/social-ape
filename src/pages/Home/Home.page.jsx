@@ -4,6 +4,7 @@ import axios from 'axios';
 // Components
 import Scream from '../../components/Scream/Scream.component';
 import Loader from '../../components/Loader/Loader.component';
+import Profile from '../../components/Profile/Profile.component';
 import Grid from '@material-ui/core/Grid';
 
 class Home extends Component {
@@ -45,7 +46,7 @@ class Home extends Component {
 					{recentScreamsMarkup}
 				</Grid>
 				<Grid item sm={3} xs={12}>
-					<p>Profile Section</p>
+					<Profile />
 				</Grid>
 			</Grid>
 		);
